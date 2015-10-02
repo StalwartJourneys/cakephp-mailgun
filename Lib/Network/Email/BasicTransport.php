@@ -17,7 +17,49 @@ class BasicTransport extends AbstractTransport {
  *
  * @var array
  */
-	protected $_config = array();
+ $_config = array();
+
+/**
+ * Email header to Mailgun param mapping
+ *
+ * @var array
+ */
+    protected $_paramMapping = array(
+        'From' => 'from',
+        'To' => 'to',
+        'Cc' => 'cc',
+        'Bcc' => 'bcc',
+        'Subject' => 'subject',
+        'text' => 'text',
+        'html' => 'html',
+        'Reply-To' => 'h:Reply-To',
+        'Disposition-Notification-To' => 'h:Disposition-Notification-To',
+        'Return-Path' => 'h:Return-Path',
+        'o:tag' => 'o:tag',
+        'mg:tag' => 'o:tag',
+        'X-Mailgun-Tag' => 'o:tag',
+        'o:campaign' => 'o:campaign',
+        'mg:campaign' => 'o:campaign',
+        'X-Mailgun-Campaign-Id' => 'o:campaign',
+        'o:dkim' => 'o:dkim',
+        'mg:dkim' => 'o:dkim',
+        'X-Mailgun-Dkim' => 'o:dkim',
+        'o:deliverytime' => 'o:deliverytime',
+        'mg:deliverytime' => 'o:deliverytime',
+        'X-Mailgun-Deliver-By' => 'o:deliverytime',
+        'o:testmode' => 'o:testmode',
+        'mg:testmode' => 'o:testmode',
+        'X-Mailgun-Drop-Message' => 'o:testmode',
+        'o:tracking' => 'o:tracking',
+        'mg:tracking' => 'o:tracking',
+        'X-Mailgun-Track' => 'o:tracking',
+        'o:tracking-clicks' => 'o:tracking-clicks',
+        'mg:tracking-clicks' => 'o:tracking-clicks',
+        'X-Mailgun-Track-Clicks' => 'o:tracking-clicks',
+        'o:tracking-opens' => 'o:tracking-opens',
+        'mg:tracking-opens' => 'o:tracking-opens',
+        'X-Mailgun-Track-Opens' => 'o:tracking-opens',
+    );
 
 /**
  * Send mail
@@ -37,9 +79,10 @@ class BasicTransport extends AbstractTransport {
                 'html' => $email->message(CakeEmail::MESSAGE_HTML)
             )
         );
-        foreach ($post_preprocess as $k => $v) {
-            if (! empty($v)) {
-                $post[strtolower($k)] = $v;
+        foreach ($post_preprocess as $header => $value) {
+            if (!empty($value) && isset($this->_paramMapping[$header])) {
+                $key = $this->_paramMapping[$header];
+                $post[$key] = $value;
             }
         }
         $request = array(
