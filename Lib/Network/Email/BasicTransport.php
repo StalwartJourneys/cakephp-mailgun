@@ -17,7 +17,7 @@ class BasicTransport extends AbstractTransport {
  *
  * @var array
  */
- $_config = array();
+    protected $_config = array();
 
 /**
  * Email header to Mailgun param mapping
