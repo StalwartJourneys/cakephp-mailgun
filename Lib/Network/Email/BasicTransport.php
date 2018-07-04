@@ -68,13 +68,11 @@ class BasicTransport extends AbstractTransport {
  * @return array
  */
     public function send(CakeEmail $email) {
-/*	$http = new HttpSocket(array(
+	$http = new HttpSocket(array(
             'ssl_verify_peer' => false,
             'ssl_verify_host' => false,
             'ssl_allow_self_signed' => true
         ));
-*/
-	$http = new HttpSocket();
 	
         $url = 'https://api.mailgun.net/v2/' . $this->_config['mailgun_domain'] . '/messages';
         $post = array();
